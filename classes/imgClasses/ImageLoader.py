@@ -10,37 +10,38 @@ class ImageLoader:
     # this class allows you to add any image that is in imgs folder
     def __init__(self):
         self.regex_imgs = re.compile("imgs$")
-        self.regex_git = re.compile("\.git$")
+        self.regex_git = re.compile("\.git")
         self.regex_idea = re.compile("\.idea$")
+        self.regex_pycache = re.compile('__pycache__$')
         self.regex_projDir = re.compile("Resize_window$")
         self.imgFolderPath = os.getcwd()
-        self.getImgDir()
+        self.get_img_dir()
         self.images = {}
 
     def loadImage(self, imageName: str) -> None:
         if imageName not in list(self.images.keys()):
-            imgName = imageName[:-4]
+            img_name = os.path.splitext(imageName)[0]
             # self.images[imgName] = ImageInfo(imgName)
-            self.images[imgName] = "placeholder"
+            self.images[img_name] = "placeholder"
 
-    def getImgDir(self):
+    def get_img_dir(self):
         finding = True
-        excluded = [".idea", "__pycache__", ".git"]
         while finding:
-            posibble_dirs = [x[0] for x in os.walk(self.imgFolderPath) if x not in excluded]
-            for paths in posibble_dirs:
+            possible_dirs = [x[0] for x in os.walk(self.imgFolderPath)
+                             if not self.regex_git.search(x[0])
+                             or self.regex_pycache.search(x[0])]
+
+            for paths in possible_dirs:
                 if not finding:
                     break
-                if re.search(self.regex_git, paths) or re.match(self.regex_idea, paths):
+                if self.regex_git.search(paths) or self.regex_idea.search(paths):
                     continue
-                if re.search(self.regex_imgs, paths):
+                if self.regex_imgs.search(paths):
                     finding = False
                     self.imgFolderPath = paths
                     self.imgFolderPath = os.path.join(self.imgFolderPath, "imgs")
 
-
             self.imgFolderPath = os.path.abspath(os.path.join(self.imgFolderPath, os.pardir))
-
 
 
 if __name__ == '__main__':
@@ -54,7 +55,8 @@ if __name__ == '__main__':
     for element in my_list:
         if regex.search(element):
             print(element)
-
+    print("------------")
+    print(imgl.images)
     print(imgl.imgFolderPath)
 
     # while True:
