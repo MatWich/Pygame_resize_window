@@ -7,8 +7,21 @@ except ImportError:
 
 
 class ImageLoader:
+    _instance = None
     # this class allows you to add any image that is in imgs folder
+    # This class will be probably a singleton
+    @staticmethod
+    def get_instance():
+        if ImageLoader._instance == None:
+            ImageLoader()
+        return ImageLoader._instance
+
     def __init__(self):
+        if ImageLoader._instance != None:
+            raise Exception("You cannot create second instance of this class")
+        else:
+            ImageLoader._instance = self
+
         self.regex_imgs = re.compile("imgs$")
         self.regex_git = re.compile("\.git")
         self.regex_idea = re.compile("\.idea$")
@@ -18,13 +31,14 @@ class ImageLoader:
         self.get_img_dir()
         self.images = {}
 
-    def loadImage(self, imageName: str) -> None:
+    def load_image(self, imageName: str) -> None:
         if imageName not in list(self.images.keys()):
             img_name = os.path.splitext(imageName)[0]
-            # self.images[imgName] = ImageInfo(imgName)
-            self.images[img_name] = "placeholder"
+            path_to_img = os.path.join(self.imgFolderPath, imageName)
+            self.images[img_name] = ImageInfo(img_name, path_to_img)
 
     def get_img_dir(self):
+        """ Method that fire only one to find a correct dir """
         finding = True
         while finding:
             possible_dirs = [x[0] for x in os.walk(self.imgFolderPath)
@@ -45,25 +59,13 @@ class ImageLoader:
 
 
 if __name__ == '__main__':
-    imgl = ImageLoader()
-    imgl.loadImage("img1.png")
-    my_path = os.getcwd()
-
-    regex = re.compile("test$")
-    my_list = ["csdcjk/test", "fdsdfs", "fsbcs"]
-
-    for element in my_list:
-        if regex.search(element):
-            print(element)
-    print("------------")
-    print(imgl.images)
+    imgl = ImageLoader.get_instance()
+    imgl.load_image("img1.png")
+    print(f" Image Loader Images name: {imgl.images['img1'].name}")
+    print(f" Image Loader Images path: {imgl.images['img1'].path}")
+    print(f" Image Loader Images image: {imgl.images['img1'].image}")
     print(imgl.imgFolderPath)
 
-    # while True:
-    #     posibble_dirs = [x[0] for x in os.walk(my_path)]
-    #     print(posibble_dirs)
-    #     if "imgs" in posibble_dirs:
-    #         my_path = os.path.join(my_path, "imgs")
 
 
 

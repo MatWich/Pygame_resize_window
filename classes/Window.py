@@ -1,5 +1,8 @@
 import pygame
 
+from classes.imgClasses.ImageLoader import ImageLoader
+from classes.sprites.MySprite import MySprite
+
 try:
     import pygame as pg
 except ImportError:
@@ -13,14 +16,18 @@ class Window:
         pg.display.set_caption("Window")
         self.clock = pg.time.Clock()
         self.run = True
+        self.imgl = ImageLoader.get_instance()
         self.set_up()
-
 
     def set_up(self):
         self.all_sprites = pg.sprite.Group()
+        self.imgl.load_image("img1.png")
+        self.player = MySprite(self, 0, 0)
+
 
     def mainloop(self):
         while self.run:
+            self.dt = self.clock.tick(60) / 1000
             self.events()
             self.update()
             self.draw()
@@ -37,7 +44,9 @@ class Window:
         self.all_sprites.update()
 
     def draw(self):
-        pass
+        self.screen.fill((122, 0, 122))
+        self.screen.blit(self.player.image, (0, 0))
+        pg.display.update()
 
     def quit(self):
         self.run = False
