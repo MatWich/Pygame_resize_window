@@ -5,6 +5,10 @@ try:
 except ImportError:
     raise ImportError("os wasn't imported")
 
+try:
+    import pygame as pg
+except ImportError:
+    raise ImportError("pygame not found")
 
 class ImageLoader:
     _instance = None
@@ -27,7 +31,9 @@ class ImageLoader:
         self.regex_idea = re.compile("\.idea$")
         self.regex_pycache = re.compile('__pycache__$')
         self.regex_projDir = re.compile("Resize_window$")
+
         self.imgFolderPath = os.getcwd()
+        self.tile_size = 64     # size of the sprite
         self.get_img_dir()
         self.images = {}
 
@@ -35,7 +41,7 @@ class ImageLoader:
         if imageName not in list(self.images.keys()):
             img_name = os.path.splitext(imageName)[0]
             path_to_img = os.path.join(self.imgFolderPath, imageName)
-            self.images[img_name] = ImageInfo(img_name, path_to_img)
+            self.images[img_name] = ImageInfo(img_name, path_to_img, self.tile_size)
 
     def get_img_dir(self):
         """ Method that fire only one to find a correct dir """

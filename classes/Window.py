@@ -1,6 +1,7 @@
 import pygame
 
 from classes.imgClasses.ImageLoader import ImageLoader
+from classes.imgClasses.ImageResizer import ImageResizer
 from classes.sprites.MySprite import MySprite
 
 try:
@@ -12,11 +13,12 @@ except ImportError:
 class Window:
     def __init__(self):
         pg.init()
-        self.screen = pg.display.set_mode((500, 500))
+        self.screen = pg.display.set_mode((500, 500), pg.RESIZABLE)
         pg.display.set_caption("Window")
         self.clock = pg.time.Clock()
         self.run = True
         self.imgl = ImageLoader.get_instance()
+        self.imgr = ImageResizer(self, self.imgl, 3)
         self.set_up()
 
     def set_up(self):
@@ -39,13 +41,17 @@ class Window:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.quit()
+            if event.type == pg.VIDEORESIZE:
+                self.screen = pg.display.set_mode((event.w, event.h), pg.RESIZABLE)
+                self.imgr.resize_imgs()
 
     def update(self):
         self.all_sprites.update()
+        # print(self.screen.get_size())
 
     def draw(self):
         self.screen.fill((122, 0, 122))
-        self.screen.blit(self.player.image, (0, 0))
+        self.screen.blit(self.player.image, (self.screen.get_width() // 2, self.screen.get_height() // 2))
         pg.display.update()
 
     def quit(self):

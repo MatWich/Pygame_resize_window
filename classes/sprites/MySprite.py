@@ -12,7 +12,7 @@ class MySprite(pg.sprite.Sprite):
     def __init__(self, window, x: int, y: int):
         self.groups = window.all_sprites
         self.imgl = ImageLoader.get_instance()
-        pygame.sprite.Sprite.__init__(self, self.groups)
+        pg.sprite.Sprite.__init__(self, self.groups)
         self.window = window
         self.image = self.imgl.images["img1"].image
         # self.image.fill((255, 0, 0))
@@ -20,7 +20,7 @@ class MySprite(pg.sprite.Sprite):
         self.y = y
 
     def update(self):
-        pass
+        self.image = self.imgl.images["img1"].image
 
 
 
