@@ -35,7 +35,7 @@ class ImageLoader:
         self.regex_git = re.compile("\.git")
         self.regex_idea = re.compile("\.idea$")
         self.regex_pycache = re.compile('__pycache__$')
-        self.regex_projDir = re.compile("Resize_window$")
+        self.regex_projDir = re.compile("Pygame_resize_window$")
 
         self.imgFolderPath = os.getcwd()
         self.tile_size = 64  # initial size of the sprite
