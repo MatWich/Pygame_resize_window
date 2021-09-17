@@ -1,5 +1,6 @@
 from classes.imgClasses.ImageInfo import ImageInfo
 import re
+
 try:
     import os
 except ImportError:
@@ -10,8 +11,11 @@ try:
 except ImportError:
     raise ImportError("pygame not found")
 
+
 class ImageLoader:
+    """ Singleton class that can load any png as long as it is located in the imgs folder"""
     _instance = None
+
     # this class allows you to add any image that is in imgs folder
     # This class will be probably a singleton
     @staticmethod
@@ -26,6 +30,7 @@ class ImageLoader:
         else:
             ImageLoader._instance = self
 
+        # Regexes bc it needs to locate imgs folder in the project
         self.regex_imgs = re.compile("imgs$")
         self.regex_git = re.compile("\.git")
         self.regex_idea = re.compile("\.idea$")
@@ -33,7 +38,7 @@ class ImageLoader:
         self.regex_projDir = re.compile("Resize_window$")
 
         self.imgFolderPath = os.getcwd()
-        self.tile_size = 64     # size of the sprite
+        self.tile_size = 64  # initial size of the sprite
         self.get_img_dir()
         self.images = {}
 
@@ -64,6 +69,7 @@ class ImageLoader:
             self.imgFolderPath = os.path.abspath(os.path.join(self.imgFolderPath, os.pardir))
 
 
+# Example of ImageLoader class
 if __name__ == '__main__':
     imgl = ImageLoader.get_instance()
     imgl.load_image("img1.png")
@@ -71,7 +77,3 @@ if __name__ == '__main__':
     print(f" Image Loader Images path: {imgl.images['img1'].path}")
     print(f" Image Loader Images image: {imgl.images['img1'].image}")
     print(imgl.imgFolderPath)
-
-
-
-

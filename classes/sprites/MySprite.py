@@ -9,6 +9,7 @@ except ImportError:
 
 
 class MySprite(pg.sprite.Sprite):
+    """ Basic Sprite class adjusted to use ImageLoader """
     def __init__(self, window, x: int, y: int):
         self.groups = window.all_sprites
         self.imgl = ImageLoader.get_instance()

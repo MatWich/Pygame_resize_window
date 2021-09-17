@@ -5,6 +5,7 @@ except ImportError:
 
 
 class ImageInfo:
+    """All important stuff about Images"""
     name: str
     path: str
     size_w: int

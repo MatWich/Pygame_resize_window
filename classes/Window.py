@@ -11,6 +11,7 @@ except ImportError:
 
 
 class Window:
+    """ Creates window main class """
     def __init__(self):
         pg.init()
         self.screen = pg.display.set_mode((500, 500), pg.RESIZABLE)
